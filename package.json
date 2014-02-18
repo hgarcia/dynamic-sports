@@ -4,8 +4,7 @@
   "description": "A multi-sport tracker",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -R spec",
-    "test-w": "mocha -w -R spec"
+    "test": "node_modules/karma/bin/karma start tests/karma.config.js"
   },
     "repository": {
     "type": "git",
@@ -20,6 +19,15 @@
     "Kayak",
     "Canoe"
   ],
+  "devDependencies": {
+    "karma-phantomjs-launcher": "0.1.2",
+    "karma-jasmine": "0.1.5",
+    "karma-ng-scenario": "0.1.0",
+    "karma-junit-reporter": "0.2.1",
+    "karma": "0.10.9",
+    "karma-coverage": "0.2.0",
+    "phantomjs": "1.9.7-1"
+  },
   "author": "Hernan Garcia <hernan@dynamicprogrammer.com> (http://dynamicprogrammer.com)",
   "license": "MIT",
   "bugs": {
