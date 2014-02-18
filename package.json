@@ -1,0 +1,28 @@
+{
+  "name": "dynamic-sports",
+  "version": "0.1.0",
+  "description": "A multi-sport tracker",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha -R spec",
+    "test-w": "mocha -w -R spec"
+  },
+    "repository": {
+    "type": "git",
+    "url": "git@github.com:hgarcia/dynamic-sports.git"
+  },
+  "keywords": [
+    "Ski",
+    "Racing",
+    "Biking",
+    "Running",
+    "Hiking",
+    "Kayak",
+    "Canoe"
+  ],
+  "author": "Hernan Garcia <hernan@dynamicprogrammer.com> (http://dynamicprogrammer.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hgarcia/distro/issues"
+  }
+}
