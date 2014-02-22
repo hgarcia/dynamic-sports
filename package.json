@@ -4,7 +4,8 @@
   "description": "A multi-sport tracker",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/karma/bin/karma start tests/karma.config.js"
+    "test": "node_modules/karma/bin/karma start tests/karma.config.js",
+    "ios": "phonegap install ios"
   },
     "repository": {
     "type": "git",

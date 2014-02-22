@@ -4,12 +4,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <title>Dynamic Sports</title>
-
     <!-- ionic css -->
     <link href="bower_components/ionic/release/css/ionic.css" rel="stylesheet">
-
     <!-- your app's css -->
     <link href="css/app.css" rel="stylesheet">
+  </head>
+
+  <body ng-app="dynamic-sports" animation="slide-left-right-ios7">
+
+    <nav-bar type="bar-dark"
+             animation="nav-title-slide-ios7"
+             back-button-type="button-icon"
+             back-button-icon="ion-ios7-arrow-back"></nav-bar>
+
+    <nav-view></nav-view>
 
     <!-- angularjs scripts -->
     <script src="bower_components/ionic/release/js/ionic.js"></script>
@@ -26,16 +34,5 @@
     <script src="js/app.js"></script>
     <script src="js/services.js"></script>
     <script src="js/controllers.js"></script>
-  </head>
-
-  <body ng-app="dynamic-sports" animation="slide-left-right-ios7">
-
-    <nav-bar type="bar-dark"
-             animation="nav-title-slide-ios7"
-             back-button-type="button-icon"
-             back-button-icon="ion-ios7-arrow-back"></nav-bar>
-
-    <nav-view></nav-view>
-
   </body>
 </html>
