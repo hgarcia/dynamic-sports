@@ -15,6 +15,6 @@
     "tests"
   ],
   "dependencies": {
-    "ionic": "~0.9.24"
+    "ionic": "~0.9.26"
   }
 }
