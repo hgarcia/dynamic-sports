@@ -1,37 +1,12 @@
 {
-  "name": "dynamic-sports",
-  "version": "0.1.0",
-  "description": "A multi-sport tracker",
-  "main": "index.js",
-  "scripts": {
-    "test": "node_modules/karma/bin/karma start tests/karma.config.js",
-    "ios": "phonegap install ios"
-  },
-    "repository": {
-    "type": "git",
-    "url": "git@github.com:hgarcia/dynamic-sports.git"
-  },
-  "keywords": [
-    "Ski",
-    "Racing",
-    "Biking",
-    "Running",
-    "Hiking",
-    "Kayak",
-    "Canoe"
-  ],
-  "devDependencies": {
-    "karma-phantomjs-launcher": "0.1.2",
-    "karma-jasmine": "0.1.5",
-    "karma-ng-scenario": "0.1.0",
-    "karma-junit-reporter": "0.2.1",
-    "karma": "0.10.9",
-    "karma-coverage": "0.2.0",
-    "phantomjs": "1.9.7-1"
-  },
-  "author": "Hernan Garcia <hernan@dynamicprogrammer.com> (http://dynamicprogrammer.com)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/hgarcia/distro/issues"
+  "name": "ionic-project",
+  "version": "1.0.0",
+  "description": "An Ionic project",
+  "dependencies": {
+    "gulp": "^3.5.6",
+    "gulp-sass": "^0.7.1",
+    "gulp-concat": "^2.2.0",
+    "gulp-minify-css": "^0.3.0",
+    "gulp-rename": "^1.2.0"
   }
 }

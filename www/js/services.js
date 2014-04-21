@@ -1,23 +1,26 @@
-angular
-.module('dynamic-sports.services', [])
-.factory('PetService', function() {
+angular.module('starter.services', [])
+
+/**
+ * A simple example service that returns some data.
+ */
+.factory('Friends', function() {
   // Might use a resource here that returns a JSON array
 
   // Some fake testing data
-  var pets = [
-    { id: 0, title: 'Cats', description: 'Furry little creatures. Obsessed with plotting assassination, but never following through on it.' },
-    { id: 1, title: 'Dogs', description: 'Lovable. Loyal almost to a fault. Smarter than they let on.' },
-    { id: 2, title: 'Turtles', description: 'Everyone likes turtles.' },
-    { id: 3, title: 'Sharks', description: 'An advanced pet. Needs millions of gallons of salt water. Will happily eat you.' }
+  var friends = [
+    { id: 0, name: 'Scruff McGruff' },
+    { id: 1, name: 'G.I. Joe' },
+    { id: 2, name: 'Miss Frizzle' },
+    { id: 3, name: 'Ash Ketchum' }
   ];
 
   return {
     all: function() {
-      return pets;
+      return friends;
     },
-    get: function(petId) {
+    get: function(friendId) {
       // Simple index lookup
-      return pets[petId];
+      return friends[friendId];
     }
   }
 });
