@@ -4,7 +4,7 @@
   "description": "An application to track your outdoor life",
   "scripts": {
     "test": "node_modules/karma/bin/karma start tests/karma.config.js",
-    "ios": "gulp sass && ionic emulate ios"
+    "ios": "gulp && ionic emulate ios"
   },
   "repository": {
     "type": "git",

@@ -1,10 +1,9 @@
 /* globals angular */
 angular
-  .module('dynamic-sports', ['ionic', 'dynamic-sports.controllers'])
+  .module('dynamic-sports', ['ionic', 'dynamic-sports.controllers', 'dynamic-sports.services', 'dynamic-sports.directives'])
   .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
       if(window.StatusBar) {
-        // org.apache.cordova.statusbar required
         StatusBar.styleDefault();
       }
     });

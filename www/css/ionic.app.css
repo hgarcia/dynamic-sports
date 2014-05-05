@@ -6325,3 +6325,22 @@ a.button {
   top: 96px; }
 .platform-android.platform-cordova .title {
   line-height: 48px; }
+
+.center-child .scroll {
+  left: 50%;
+  margin-left: -55px;
+  margin-top: -100px;
+  position: fixed;
+  top: 50%; }
+  .center-child .scroll .button.start-stop {
+    border-radius: 50px;
+    height: 100px;
+    margin: 0 auto;
+    position: relative;
+    width: 100px; }
+  .center-child .scroll .button.icon:before {
+    font-size: 48px; }
+  .center-child .scroll .button.ion-play:before {
+    padding-left: 10px; }
+  .center-child .scroll .button.ion-pause:before {
+    padding-left: 2px; }

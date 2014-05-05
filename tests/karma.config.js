@@ -9,15 +9,12 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'bower_components/ionic/release/js/ionic.js',
-      'bower_components/angular/angular.js',
-      'bower_components/angular-animate/angular-animate.js',
-      'bower_components/angular-sanitize/angular-sanitize.js',
-      'bower_components/angular-ui-router/release/angular-ui-router.js',
-      'bower_components/ionic/release/js/ionic-angular.js',
-      'js/*.js',
-      '../tests/helper.js',
-      '../tests/*.spec.js'
+      'lib/ionic/js/ionic.bundle.js',
+      'lib/ionic/js/angular/angular-mocks.js',
+      '../tests/cordova_mocks.js',
+      '../js/*.js',
+      '../js/**/*.js',
+      '../tests/**/*_spec.js'
     ],
 
     preprocessors: {

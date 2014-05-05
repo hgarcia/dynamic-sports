@@ -5,7 +5,7 @@ var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 
 var paths = {
-  sass: ['./scss/**/*.scss']
+  all: ['./scss/**/*.scss', './js/*.js', './js/**/*.js']
 };
 
 gulp.task('sass', function(done) {
@@ -20,8 +20,14 @@ gulp.task('sass', function(done) {
     .on('end', done);
 });
 
-gulp.task('watch', function() {
-  gulp.watch(paths.sass, ['sass']);
+gulp.task('scripts', function() {
+  gulp.src(['./js/*.js', './js/**/*.js'])
+    .pipe(concat('all.js'))
+    .pipe(gulp.dest('./www/js/'));
 });
 
-gulp.task('default', ['sass']);
+gulp.task('watch', function() {
+  gulp.watch(paths.all, ['sass', 'scripts']);
+});
+
+gulp.task('default', ['sass', 'scripts']);
