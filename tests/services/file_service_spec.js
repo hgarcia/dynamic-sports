@@ -59,7 +59,7 @@ describe("File services", function () {
         spyOn(writer, 'write');
       });
 
-      it("should serialize the content and added to the file", function () {
+      it("should serialize the content and add to the file", function () {
         service.save("file", {data: "some-data"}, openSuccess, openError);
         window.OnRequestFileSystemSuccess().OnGetFileSuccess().OnWriteSuccess();
         expect(writer.write).toHaveBeenCalledWith('{"data":"some-data"}');

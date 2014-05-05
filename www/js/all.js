@@ -76,58 +76,58 @@ angular.module('dynamic-sports.services')
   .factory('fileService', function () {
   'use strict';
 
-    function gotFileEntry(data, errorCb, successCb) {
-    	return function(fileEntry) {
-        	fileEntry.createWriter(gotFileWriter(data, successCb), errorCb);
-    	};
+    function writeToFile(data, successCb) {
+      return function (writer) {
+        writer.onwriteend = function(evt) {
+          if (successCb) {
+            successCb();
+          }
+        };
+        writer.seek(writer.length);
+        writer.write(JSON.stringify(data));
+      };
     }
 
-    function gotFileWriter(data, successCb) {
-    	return function (writer) {
-	        writer.onwriteend = function(evt) {
-	        	if (successCb) {
-	           		successCb();
-	        	}
-	        };
-	        writer.seek(writer.length);
-	        writer.write(JSON.stringify(data));
-    	};
+    function gotFileEntry(data, successCb, errorCb) {
+      return function(fileEntry) {
+        fileEntry.createWriter(writeToFile(data, successCb), errorCb);
+      };
     }
 
-    function fileContents(errorCb, successCb) {
-    	return function (file) {
-    		var reader = new FileReader();
-	        reader.onloadend = function(evt) {
-	            successCb(evt.target.result);
-	        };
-	        reader.readAsText(file);
-    	};
+    function write(fileName, data, successCb, errorCb) {
+      return function (fileSystem) {
+        fileSystem.root.getFile(fileName, {create: true, exclusive: false}, gotFileEntry(data, successCb, errorCb), errorCb);
+      };
     }
 
-    function readFile(errorCb, successCb) {
-    	return function (fileEntry) {
-    		fileEntry.file(fileContents(errorCb, successCb), errorCb);
-    	};
+    function fileContents(successCb) {
+      return function (file) {
+        var reader = new FileReader();
+        reader.onloadend = function(evt) {
+          successCb(evt.target.result);
+        };
+        reader.readAsText(file);
+      };
     }
 
-    function write(data, errorCb, successCb) {
-    	return function (fileSystem) {
-        	fileSystem.root.getFile("readme.txt", {create: true, exclusive: false}, gotFileEntry(data, errorCb, successCb), errorCb);
-    	};
+    function readFile(successCb, errorCb) {
+      return function (fileEntry) {
+        fileEntry.file(fileContents(successCb), errorCb);
+      };
     }
 
-    function read(errorCb, successCb) {
-    	return function (fileSystem) {
-    		fileSystem.root.getFile("readme.txt", null, readFile(errorCb, successCb), errorCb);
-    	};
+    function read(fileName, successCb, errorCb) {
+      return function (fileSystem) {
+        fileSystem.root.getFile(fileName, null, readFile(successCb, errorCb), errorCb);
+      };
     }
 
     return {
-      save: function (data, errorCb, successCb) {
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, write(data, errorCb, successCb), errorCb);
+      save: function (fileName, data, successCb, errorCb) {
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, write(fileName, data, successCb, errorCb), errorCb);
       },
-      open: function (errorCb, successCb) {
-      	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, read(errorCb, successCb), errorCb);
+      open: function (fileName, successCb, errorCb) {
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, read(fileName, successCb, errorCb), errorCb);
       }
     };
   });
