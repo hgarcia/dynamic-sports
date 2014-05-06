@@ -11,12 +11,17 @@ describe("Geo Location services", function () {
   }));
 
   describe("start(successCb, errorCb)", function () {
+    var success = function () {};
+    var error = function () {};
 
     it("should start watching the position", function () {
-      var success = function () {};
-      var error = function () {};
       service.start(success, error);
       expect(navigator.geolocation.watchPosition).toHaveBeenCalledWith(success, error);
+    });
+
+    it("should return an id for the started service", function () {
+      var result = service.start(success, error);
+      expect(result).not.toBeNull();
     });
   });
 

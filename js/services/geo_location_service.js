@@ -6,6 +6,7 @@ angular.module('dynamic-sports.services')
     return {
       start: function (success, error) {
         watchId = navigator.geolocation.watchPosition(success, error);
+        return watchId;
       },
       stop: function () {
         if (watchId) {
