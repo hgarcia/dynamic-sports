@@ -23,8 +23,8 @@ angular
 angular.module('dynamic-sports.controllers', []);
 /* globals angular, console */
 angular.module('dynamic-sports.controllers')
-  .controller('HomeCtrl', ['$scope', 'geoLocationService', 'fileService',
-    function ($scope, geoLocationService, fileService) {
+  .controller('HomeCtrl', ['$scope', 'geoLocationService', 'fileService', 'serverService',
+    function ($scope, geoLocationService, fileService, serverService) {
     'use strict';
     var fileName;
 
@@ -34,19 +34,29 @@ angular.module('dynamic-sports.controllers')
       fileService.save(fileName, data, function () {}, function (error) {});
     }
 
-    function onChangeError(error) {
+    function errHandler(error) {
       alert("Error: " + error);
     }
 
+    function filesSaved() {
+      alert("Saved");
+    }
+
+    function uploadFiles(files) {
+      serverService.upload(files, filesSaved, errHandler);
+    }
+
+    $scope.upload = function () {
+      fileService.list(uploadFiles, errHandler);
+    };
+
     $scope.recording = function (on) {
       if (on) {
-        fileName = geoLocationService.start(onChange, onChangeError);
+        fileName = geoLocationService.start(onChange, errHandler);
       } else {
         geoLocationService.stop();
-        fileService.open(fileName, function (result) { alert(result); }, function (error) {alert("Err:" + error); });
       }
     };
-    
   }]);
 angular.module('dynamic-sports.directives', []);
 angular.module('dynamic-sports.directives')
@@ -123,7 +133,17 @@ angular.module('dynamic-sports.services')
       };
     }
 
+    function list(successCb, errorCb) {
+      return function (fileSystem) {
+        var reader = fileSystem.root.createReader();
+        reader.readEntries(successCb, errorCb);
+      };
+    }
+
     return {
+      list: function (successCb, errorCb) {
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, list(successCb, errorCb), errorCb);
+      },
       save: function (fileName, data, successCb, errorCb) {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, write(fileName, data, successCb, errorCb), errorCb);
       },
@@ -146,6 +166,28 @@ angular.module('dynamic-sports.services')
       stop: function () {
         if (watchId) {
            navigator.geolocation.clearWatch(watchId);
+        }
+      }
+    };
+  });
+
+/* globals angular */
+angular.module('dynamic-sports.services')
+  .factory('serverService', function () {
+    'use strict';
+
+    function getFileUploadOptions(fileURI) {
+      var options = new FileUploadOptions();
+      options.fileName = fileURI.substr(fileURI.lastIndexOf('/')+1);
+      options.mimeType = "text/plain";
+      return options;
+    }
+    return {
+      upload: function (files, onSuccess, onError) {
+        var ft =  new FileTransfer();
+        for (var i = 0; i < files.length; i++) {
+          var file = files[i];
+          ft.upload(file.fullPath, encodeURI("http://pacific-taiga-3446.herokuapp.com/uploads"), onSuccess, onError, getFileUploadOptions(file.fullPath));
         }
       }
     };

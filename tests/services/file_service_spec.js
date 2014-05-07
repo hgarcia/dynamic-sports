@@ -12,6 +12,34 @@ describe("File services", function () {
     openError = jasmine.createSpy();
   }));
 
+  describe("list(successCb, errorCb)", function () {
+
+    it("should use the file service", function () {
+      spyOn(window, "requestFileSystem");
+      service.list(openSuccess, openError);
+      expect(window.requestFileSystem).toHaveBeenCalled();
+    });
+
+    it("should return a list of files on success", function () {
+      service.list(openSuccess, openError);
+      var result = [{name: "fghijkl"}, {name: "mnopqrst"}];
+      window.OnRequestFileSystemSuccess().OnReadEntriesSuccess(result);
+      expect(openSuccess).toHaveBeenCalledWith(result);
+    });
+
+    it("should call the errorCb if requestFileSystem fails", function () {
+      service.list(openSuccess, openError);
+      window.OnRequestFileSystemError();
+      expect(openError).toHaveBeenCalled();
+    });
+
+    it("should call the errorCb if reading files fails", function () {
+      service.list(openSuccess, openError);
+      window.OnRequestFileSystemSuccess().OnReadEntriesError();
+      expect(openError).toHaveBeenCalled();
+    });
+  });
+
   describe("open(fileName, successCb, errorCb)", function () {
 
     it("should use the file service", function () {

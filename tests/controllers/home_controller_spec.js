@@ -1,16 +1,29 @@
 /*global describe: true, beforeEach: true, it: true, expect: true, module: true, inject: true, spyOn */
 describe("HomeCtrl", function () {
   "use strict";
-  var scope, geoLocationService, fileService;
+  var scope, geoLocationService, fileService, serverService;
 
   beforeEach(module("dynamic-sports"));
 
-  beforeEach(inject(function ($rootScope, $controller, _geoLocationService_, _fileService_) {
+  beforeEach(inject(function ($rootScope, $controller, _geoLocationService_, _fileService_, _serverService_) {
     scope = $rootScope.$new();
     geoLocationService = _geoLocationService_;
     fileService = _fileService_;
+    serverService = _serverService_;
     $controller("HomeCtrl", {$scope: scope, geoLocationService: geoLocationService, fileService: fileService});
   }));
+
+  describe("#upload()", function () {
+
+    it("should use the serverService to upload the files", function () {
+      spyOn(serverService, "upload");
+      var payload = [{name: "file-name-1"}, {name: "file-name-2"}, {name: "file-name-3"}];
+      spyOn(fileService, "list");
+      scope.upload();
+      fileService.list.mostRecentCall.args[0](payload);
+      expect(serverService.upload).toHaveBeenCalled();
+    });
+  });
 
   describe("#recording() start", function () {
 

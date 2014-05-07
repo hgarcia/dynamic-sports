@@ -5,12 +5,16 @@ navigator = {geolocation: {watchPosition: jasmine.createSpy().andReturn("12345")
 // File
 LocalFileSystem = {PERSISTENT: 1};
 
-var requestFileSystemSuccessCb, requestFileSystemErrorCb, getFileSuccesCb, getFileErrorCb, fileSuccesCb, fileErrorCb, writerCb;
+var requestFileSystemSuccessCb, requestFileSystemErrorCb, getFileSuccesCb, getFileErrorCb, fileSuccesCb, 
+  fileErrorCb, writerCb, readEntriesSuccessCb, readEntriesErrorCb, uploadSuccesCb, uploadErrCb;
 var fileSystem = {
   root: {
     getFile: function (fileName, options, successCb, errorCb) {
       getFileSuccesCb = successCb;
       getFileErrorCb = errorCb;
+    },
+    createReader: function () {
+      return reader;
     }
   }
 };
@@ -20,6 +24,13 @@ var writer = {
   length: 0,
   write: function (data) {
     this.onwriteend();
+  }
+};
+
+var reader = {
+  readEntries: function (successCb, errorCb) {
+    readEntriesSuccessCb = successCb;
+    readEntriesErrorCb = errorCb;
   }
 };
 
@@ -33,13 +44,29 @@ var fileEntry = {
   }
 };
 
-function FileReader () {
+function FileReader() {
   this.readAsText = function (file) {
     if (this.onloadend) {
       this.onloadend({target: {result: file}});
     } 
   };
 }
+
+function FileUploadOptions() {
+  return {};
+}
+
+var fileTransferUploadSpy = jasmine.createSpy();
+
+function FileTransfer() {
+  return {
+    upload: fileTransferUploadSpy
+  };
+}
+
+window.onFileTransferSuccess = function () {
+  fileTransferUploadSpy.mostRecentCall.args[2]();
+};
 
 window.requestFileSystem = function (cons1, cons2, successCb, errorCb) {
   requestFileSystemSuccessCb = successCb;
@@ -57,6 +84,16 @@ window.OnRequestFileSystemSuccess = function () {
     requestFileSystemSuccessCb(fileSystem);
   }
   return {
+    OnReadEntriesError: function () {
+      if (readEntriesErrorCb) {
+        readEntriesErrorCb();
+      }
+    },
+    OnReadEntriesSuccess: function (result) {
+      if (readEntriesSuccessCb) {
+        readEntriesSuccessCb(result);
+      }
+    },
     OnGetFileError: function () {
       if (getFileErrorCb) {
         getFileErrorCb();

@@ -49,7 +49,17 @@ angular.module('dynamic-sports.services')
       };
     }
 
+    function list(successCb, errorCb) {
+      return function (fileSystem) {
+        var reader = fileSystem.root.createReader();
+        reader.readEntries(successCb, errorCb);
+      };
+    }
+
     return {
+      list: function (successCb, errorCb) {
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, list(successCb, errorCb), errorCb);
+      },
       save: function (fileName, data, successCb, errorCb) {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, write(fileName, data, successCb, errorCb), errorCb);
       },

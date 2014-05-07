@@ -1,7 +1,7 @@
 /* globals angular, console */
 angular.module('dynamic-sports.controllers')
-  .controller('HomeCtrl', ['$scope', 'geoLocationService', 'fileService',
-    function ($scope, geoLocationService, fileService) {
+  .controller('HomeCtrl', ['$scope', 'geoLocationService', 'fileService', 'serverService',
+    function ($scope, geoLocationService, fileService, serverService) {
     'use strict';
     var fileName;
 
@@ -11,17 +11,27 @@ angular.module('dynamic-sports.controllers')
       fileService.save(fileName, data, function () {}, function (error) {});
     }
 
-    function onChangeError(error) {
+    function errHandler(error) {
       alert("Error: " + error);
     }
 
+    function filesSaved() {
+      alert("Saved");
+    }
+
+    function uploadFiles(files) {
+      serverService.upload(files, filesSaved, errHandler);
+    }
+
+    $scope.upload = function () {
+      fileService.list(uploadFiles, errHandler);
+    };
+
     $scope.recording = function (on) {
       if (on) {
-        fileName = geoLocationService.start(onChange, onChangeError);
+        fileName = geoLocationService.start(onChange, errHandler);
       } else {
         geoLocationService.stop();
-        fileService.open(fileName, function (result) { alert(result); }, function (error) {alert("Err:" + error); });
       }
     };
-    
   }]);
