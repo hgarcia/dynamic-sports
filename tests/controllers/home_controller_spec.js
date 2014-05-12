@@ -1,16 +1,17 @@
 /*global describe: true, beforeEach: true, it: true, expect: true, module: true, inject: true, spyOn */
 describe("HomeCtrl", function () {
   "use strict";
-  var scope, geoLocationService, fileService, serverService;
+  var scope, geoLocationService, fileService, serverService, timeout;
 
   beforeEach(module("dynamic-sports"));
 
-  beforeEach(inject(function ($rootScope, $controller, _geoLocationService_, _fileService_, _serverService_) {
+  beforeEach(inject(function ($rootScope, $controller, $timeout, _geoLocationService_, _fileService_, _serverService_) {
     scope = $rootScope.$new();
     geoLocationService = _geoLocationService_;
+    timeout = $timeout;
     fileService = _fileService_;
     serverService = _serverService_;
-    $controller("HomeCtrl", {$scope: scope, geoLocationService: geoLocationService, fileService: fileService});
+    $controller("HomeCtrl", {$scope: scope, $timeout: timeout, geoLocationService: geoLocationService, fileService: fileService});
   }));
 
   describe("#upload()", function () {

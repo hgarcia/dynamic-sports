@@ -6326,11 +6326,26 @@ a.button {
 .platform-android.platform-cordova .title {
   line-height: 48px; }
 
+.count-badge {
+  background: none repeat scroll 0 0 #FF4444;
+  border-radius: 10px;
+  color: #FFFFFF;
+  display: block;
+  font-size: 11px;
+  font-weight: 300;
+  line-height: 11px;
+  padding: 3px 1px;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: -2px;
+  width: 17px;
+  z-index: 1; }
+
 .center-child .scroll {
-  left: 50%;
-  margin-left: -55px;
-  margin-top: -100px;
+  margin-top: -105px;
   position: fixed;
+  width: 100%;
   top: 50%; }
   .center-child .scroll .button.start-stop {
     border-radius: 50px;
@@ -6344,3 +6359,10 @@ a.button {
     padding-left: 10px; }
   .center-child .scroll .button.ion-pause:before {
     padding-left: 2px; }
+
+.info-message {
+  left: 0;
+  position: fixed;
+  text-align: center;
+  top: -70px;
+  width: 100%; }

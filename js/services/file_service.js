@@ -23,8 +23,14 @@ angular.module('dynamic-sports.services')
 
     function write(fileName, data, successCb, errorCb) {
       return function (fileSystem) {
-        fileSystem.root.getFile(fileName, {create: true, exclusive: false}, gotFileEntry(data, successCb, errorCb), errorCb);
+        getCreateDir(fileSystem.root, function (dir) {
+          dir.getFile(fileName, {create: true, exclusive: false}, gotFileEntry(data, successCb, errorCb), errorCb);
+        }, errorCb);
       };
+    }
+
+    function getCreateDir(entry, successCb, errorCb) { 
+      entry.getDirectory("dynsports", {create: true, exclusive: false}, successCb, errorCb); 
     }
 
     function fileContents(successCb) {
@@ -45,14 +51,18 @@ angular.module('dynamic-sports.services')
 
     function read(fileName, successCb, errorCb) {
       return function (fileSystem) {
-        fileSystem.root.getFile(fileName, null, readFile(successCb, errorCb), errorCb);
+        getCreateDir(fileSystem.root, function (dir) {
+          dir.getFile(fileName, null, readFile(successCb, errorCb), errorCb);
+        }, errorCb);
       };
     }
 
     function list(successCb, errorCb) {
       return function (fileSystem) {
-        var reader = fileSystem.root.createReader();
-        reader.readEntries(successCb, errorCb);
+        getCreateDir(fileSystem.root, function (dir) {
+          var reader = dir.createReader();
+          reader.readEntries(successCb, errorCb);
+        }, errorCb);
       };
     }
 

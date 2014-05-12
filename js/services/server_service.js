@@ -14,7 +14,7 @@ angular.module('dynamic-sports.services')
         var ft =  new FileTransfer();
         for (var i = 0; i < files.length; i++) {
           var file = files[i];
-          ft.upload(file.fullPath, encodeURI("http://pacific-taiga-3446.herokuapp.com/uploads"), onSuccess, onError, getFileUploadOptions(file.fullPath));
+          ft.upload(file.toURL(), encodeURI("http://pacific-taiga-3446.herokuapp.com/uploads"), onSuccess, onError, getFileUploadOptions(file.fullPath));
         }
       }
     };

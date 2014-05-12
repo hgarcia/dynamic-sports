@@ -15,7 +15,7 @@ describe("File services", function () {
   describe("upload(files, successCb, errorCb)", function () {
 
     it("should call the successCb on success", function () {
-      service.upload([{fullPath: "/path/to/file"}], successCb, errorCb);
+      service.upload([{fullPath: "/path/to/file", toURL: function () { return "/path/to/file";}}], successCb, errorCb);
       onFileTransferSuccess();
       expect(successCb).toHaveBeenCalled();  
     });
