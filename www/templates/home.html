@@ -3,6 +3,7 @@
       <button class="button button-clear icon ion-ios7-cloud-upload" ng-click="upload()" ng-disabled="uploadDisabled"></button>
       <span class="count-badge" ng-show="totalFiles">{{totalFiles}}</span>
   </ion-nav-buttons>
+  <div class="status slide" ng-class='{"status-success-visible": uploadSucceded, "status-error-visible": uploadErrored}'>{{uploadMessage}}</div>
   <ion-content class="center-child" has-header="true" padding="true">
     <div class="info-message" ng-show="uploading">Uploading files...</div>
     <play-stop-button click-handler="recording"></play-stop-button>

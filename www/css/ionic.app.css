@@ -6342,6 +6342,25 @@ a.button {
   width: 17px;
   z-index: 1; }
 
+.slide {
+  color: #fff;
+  height: 22px;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 0;
+  z-index: -1;
+  -webkit-transition: all 1s;
+  -moz-transition: all 1s; }
+
+.status-success-visible {
+  background-color: #66cc33;
+  top: 64px; }
+
+.status-error-visible {
+  background-color: #f0b840;
+  top: 64px; }
+
 .center-child .scroll {
   margin-top: -105px;
   position: fixed;
