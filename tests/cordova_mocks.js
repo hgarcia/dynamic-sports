@@ -6,17 +6,22 @@ navigator = {geolocation: {watchPosition: jasmine.createSpy().andReturn("12345")
 LocalFileSystem = {PERSISTENT: 1};
 
 var requestFileSystemSuccessCb, requestFileSystemErrorCb, getFileSuccesCb, getFileErrorCb, fileSuccesCb, 
-  fileErrorCb, writerCb, readEntriesSuccessCb, readEntriesErrorCb, uploadSuccesCb, uploadErrCb;
-var fileSystem = {
-  root: {
-    getFile: function (fileName, options, successCb, errorCb) {
-      getFileSuccesCb = successCb;
-      getFileErrorCb = errorCb;
-    },
-    createReader: function () {
-      return reader;
-    }
+  fileErrorCb, writerCb, readEntriesSuccessCb, readEntriesErrorCb, uploadSuccesCb, uploadErrCb, getDirectorySuccessCb, getDirectoryErrorCb;
+var directory = {
+  getFile: function (fileName, options, successCb, errorCb) {
+    getFileSuccesCb = successCb;
+    getFileErrorCb = errorCb;
+  },
+  createReader: function () {
+    return reader;
+  },
+  getDirectory: function (fileSytem, options, successCb, errorCb) {
+    getDirectorySuccessCb = successCb;
+    getDirectoryErrorCb = errorCb;
   }
+};
+var fileSystem = {
+  root: directory
 };
 
 var writer = {
@@ -84,38 +89,45 @@ window.OnRequestFileSystemSuccess = function () {
     requestFileSystemSuccessCb(fileSystem);
   }
   return {
-    OnReadEntriesError: function () {
-      if (readEntriesErrorCb) {
-        readEntriesErrorCb();
+    OnGetDirectorySuccess: function () {
+      if (getDirectorySuccessCb) {
+        getDirectorySuccessCb(directory);
       }
-    },
-    OnReadEntriesSuccess: function (result) {
-      if (readEntriesSuccessCb) {
-        readEntriesSuccessCb(result);
-      }
-    },
-    OnGetFileError: function () {
-      if (getFileErrorCb) {
-        getFileErrorCb();
-      }
-    },
-    OnGetFileSuccess: function () {
-      if (getFileSuccesCb) {
-        getFileSuccesCb(fileEntry);
-      }
-      return {
-        OnWriteSuccess: function () {
-          writerCb(writer);
-        },
-        OnFileEntryError: function () {
-          if (fileErrorCb) {
-            fileErrorCb();
+      return { 
+        OnReadEntriesError: function () {
+          if (readEntriesErrorCb) {
+            readEntriesErrorCb();
           }
         },
-        OnFileEntrySuccess: function (content) {
-          if (fileSuccesCb) {
-            fileSuccesCb(content);
+        OnReadEntriesSuccess: function (result) {
+          if (readEntriesSuccessCb) {
+            readEntriesSuccessCb(result);
           }
+        },
+        OnGetFileError: function () {
+          if (getFileErrorCb) {
+            getFileErrorCb();
+          }
+        },
+        OnGetFileSuccess: function () {
+          if (getFileSuccesCb) {
+            getFileSuccesCb(fileEntry);
+          }
+          return {
+            OnWriteSuccess: function () {
+              writerCb(writer);
+            },
+            OnFileEntryError: function () {
+              if (fileErrorCb) {
+                fileErrorCb();
+              }
+            },
+            OnFileEntrySuccess: function (content) {
+              if (fileSuccesCb) {
+                fileSuccesCb(content);
+              }
+            }
+          };
         }
       };
     }

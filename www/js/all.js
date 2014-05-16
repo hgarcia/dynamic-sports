@@ -68,7 +68,6 @@ angular.module('dynamic-sports.controllers')
       $timeout(function () {
         $scope.totalFiles = files.length;
         $scope.uploadDisabled = $scope.totalFiles === 0;
-        hideLoading();
       }, 10);
     }
 

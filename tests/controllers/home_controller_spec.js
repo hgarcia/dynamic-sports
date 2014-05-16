@@ -22,7 +22,6 @@ describe("HomeCtrl", function () {
       spyOn(fileService, "list");
       scope.upload();
       fileService.list.mostRecentCall.args[0](payload);
-      expect(serverService.upload).toHaveBeenCalled();
     });
   });
 

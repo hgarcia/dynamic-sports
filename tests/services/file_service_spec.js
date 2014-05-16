@@ -23,7 +23,7 @@ describe("File services", function () {
     it("should return a list of files on success", function () {
       service.list(openSuccess, openError);
       var result = [{name: "fghijkl"}, {name: "mnopqrst"}];
-      window.OnRequestFileSystemSuccess().OnReadEntriesSuccess(result);
+      window.OnRequestFileSystemSuccess().OnGetDirectorySuccess().OnReadEntriesSuccess(result);
       expect(openSuccess).toHaveBeenCalledWith(result);
     });
 
@@ -35,7 +35,7 @@ describe("File services", function () {
 
     it("should call the errorCb if reading files fails", function () {
       service.list(openSuccess, openError);
-      window.OnRequestFileSystemSuccess().OnReadEntriesError();
+      window.OnRequestFileSystemSuccess().OnGetDirectorySuccess().OnReadEntriesError();
       expect(openError).toHaveBeenCalled();
     });
   });
@@ -50,7 +50,7 @@ describe("File services", function () {
 
     it("should return the file content on success", function () {
       service.open("file", openSuccess, openError);
-      window.OnRequestFileSystemSuccess().OnGetFileSuccess().OnFileEntrySuccess("file content");
+      window.OnRequestFileSystemSuccess().OnGetDirectorySuccess().OnGetFileSuccess().OnFileEntrySuccess("file content");
       expect(openSuccess).toHaveBeenCalledWith("file content");
     });
 
@@ -62,13 +62,13 @@ describe("File services", function () {
 
     it("should call the errorCb if can't get the file", function () {
       service.open("file", openSuccess, openError);
-      window.OnRequestFileSystemSuccess().OnGetFileError();
+      window.OnRequestFileSystemSuccess().OnGetDirectorySuccess().OnGetFileError();
       expect(openError).toHaveBeenCalled();
     });
 
     it("should call the errorCb if can't read the file", function () {
       service.open("file", openSuccess, openError);
-      window.OnRequestFileSystemSuccess().OnGetFileSuccess().OnFileEntryError();
+      window.OnRequestFileSystemSuccess().OnGetDirectorySuccess().OnGetFileSuccess().OnFileEntryError();
       expect(openError).toHaveBeenCalled();
     });
   });
@@ -89,19 +89,19 @@ describe("File services", function () {
 
       it("should serialize the content and add to the file", function () {
         service.save("file", {data: "some-data"}, openSuccess, openError);
-        window.OnRequestFileSystemSuccess().OnGetFileSuccess().OnWriteSuccess();
+        window.OnRequestFileSystemSuccess().OnGetDirectorySuccess().OnGetFileSuccess().OnWriteSuccess();
         expect(writer.write).toHaveBeenCalledWith('{"data":"some-data"}');
       });
 
       it("should add a string", function () {
         service.save("file", "data", openSuccess, openError);
-        window.OnRequestFileSystemSuccess().OnGetFileSuccess().OnWriteSuccess();
+        window.OnRequestFileSystemSuccess().OnGetDirectorySuccess().OnGetFileSuccess().OnWriteSuccess();
         expect(writer.write).toHaveBeenCalledWith('"data"');
       });
 
       it("should add an integer", function () {
         service.save("file", 123, openSuccess, openError);
-        window.OnRequestFileSystemSuccess().OnGetFileSuccess().OnWriteSuccess();
+        window.OnRequestFileSystemSuccess().OnGetDirectorySuccess().OnGetFileSuccess().OnWriteSuccess();
         expect(writer.write).toHaveBeenCalledWith('123');
       });
     });
