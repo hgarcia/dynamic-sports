@@ -45,7 +45,7 @@ angular.module('dynamic-sports.controllers')
     }
 
     function setSpeed(speed) {
-      if (speed > 0) {
+      if (speed >= 0) {
         $scope.session.curSpeed = toKmPerHour(speed);
       }
       if (speed > $scope.session.maxSpeed) {
@@ -83,7 +83,10 @@ angular.module('dynamic-sports.controllers')
       checkUploadFinished();
     }
 
-    function filesSaved() {
+    function filesSaved(file) {
+      if (file.remove) {
+        file.remove();
+      }
       $timeout(function () {
         $scope.totalFiles -= 1;
         checkUploadFinished();
@@ -269,12 +272,21 @@ angular.module('dynamic-sports.services')
       };
     }
 
+    function remove(file, successCb, errorCb) {
+      return function (fileSystem) {
+
+      };
+    }
+
     return {
       list: function (successCb, errorCb) {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, list(successCb, errorCb), errorCb);
       },
       save: function (fileName, data, successCb, errorCb) {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, write(fileName, data, successCb, errorCb), errorCb);
+      },
+      remove: function (file, successCb, errorCb) {
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, remove(file, successCb, errorCb), errorCb);
       },
       open: function (fileName, successCb, errorCb) {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, read(fileName, successCb, errorCb), errorCb);
@@ -289,7 +301,7 @@ angular.module('dynamic-sports.services')
     var watchId;
     return {
       start: function (success, error) {
-        watchId = navigator.geolocation.watchPosition(success, error);
+        watchId = navigator.geolocation.watchPosition(success, error, {frequency: 3000, enableHighAccuracy: true});
         return watchId;
       },
       stop: function () {
@@ -311,12 +323,18 @@ angular.module('dynamic-sports.services')
       options.mimeType = "text/plain";
       return options;
     }
+
+    function savedFile(file, cb) {
+      return function () {
+        cb(file);
+      };
+    }
     return {
       upload: function (files, onSuccess, onError) {
         var ft =  new FileTransfer();
         for (var i = 0; i < files.length; i++) {
           var file = files[i];
-          ft.upload(file.toURL(), encodeURI("http://pacific-taiga-3446.herokuapp.com/uploads"), onSuccess, onError, getFileUploadOptions(file.fullPath));
+          ft.upload(file.toURL(), encodeURI("http://pacific-taiga-3446.herokuapp.com/uploads"), savedFile(file, onSuccess), onError, getFileUploadOptions(file.fullPath));
         }
       }
     };

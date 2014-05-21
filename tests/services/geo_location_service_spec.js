@@ -16,7 +16,7 @@ describe("Geo Location services", function () {
 
     it("should start watching the position", function () {
       service.start(success, error);
-      expect(navigator.geolocation.watchPosition).toHaveBeenCalledWith(success, error);
+      expect(navigator.geolocation.watchPosition).toHaveBeenCalledWith(success, error, { frequency : 3000, enableHighAccuracy : true });
     });
 
     it("should return an id for the started service", function () {

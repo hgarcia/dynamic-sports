@@ -22,7 +22,7 @@ angular.module('dynamic-sports.controllers')
     }
 
     function setSpeed(speed) {
-      if (speed > 0) {
+      if (speed >= 0) {
         $scope.session.curSpeed = toKmPerHour(speed);
       }
       if (speed > $scope.session.maxSpeed) {
@@ -60,7 +60,10 @@ angular.module('dynamic-sports.controllers')
       checkUploadFinished();
     }
 
-    function filesSaved() {
+    function filesSaved(file) {
+      if (file.remove) {
+        file.remove();
+      }
       $timeout(function () {
         $scope.totalFiles -= 1;
         checkUploadFinished();
