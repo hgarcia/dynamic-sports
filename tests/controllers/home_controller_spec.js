@@ -1,17 +1,19 @@
 /*global describe: true, beforeEach: true, it: true, expect: true, module: true, inject: true, spyOn */
 describe("HomeCtrl", function () {
   "use strict";
-  var scope, geoLocationService, fileService, serverService, timeout;
+  var scope, geoLocationService, fileService, serverService, timeout, interval;
 
   beforeEach(module("dynamic-sports"));
 
-  beforeEach(inject(function ($rootScope, $controller, $timeout, _geoLocationService_, _fileService_, _serverService_) {
+  beforeEach(inject(function ($rootScope, $controller, $timeout, $interval, $httpBackend, _geoLocationService_, _fileService_, _serverService_) {
     scope = $rootScope.$new();
     geoLocationService = _geoLocationService_;
     timeout = $timeout;
+    interval = $interval;
     fileService = _fileService_;
     serverService = _serverService_;
-    $controller("HomeCtrl", {$scope: scope, $timeout: timeout, geoLocationService: geoLocationService, fileService: fileService});
+    $httpBackend.whenGET().respond(200, 'mock data');
+    $controller("HomeCtrl", {$scope: scope, $timeout: timeout, $interval: interval, geoLocationService: geoLocationService, fileService: fileService});
   }));
 
   describe("#upload()", function () {
@@ -38,9 +40,24 @@ describe("HomeCtrl", function () {
     });
 
     it("should call the fileService.save method", function () {
-      var payload = {coords: {}, timestamp: "time-stamp-here"};
+      var payload = {coords: {speed: 1}, timestamp: "time-stamp-here"};
       geoLocationService.start.mostRecentCall.args[0](payload);
       expect(fileService.save).toHaveBeenCalled();
+    });
+
+    it("should set the speed in km/h", function () {
+      var payload = {coords: {speed: 32}, timestamp: "time-stamp-here"};
+      geoLocationService.start.mostRecentCall.args[0](payload);
+      expect(scope.session.curSpeed).toEqual("115");
+    });
+
+    it("should start to calculate elapsed time", function () {
+      interval.flush(1000);
+      expect(scope.session.elapsed).toEqual("00:01");
+      interval.flush(1000);
+      expect(scope.session.elapsed).toEqual("00:02");
+      interval.flush(1000 * 60);
+      expect(scope.session.elapsed).toEqual("01:02");
     });
   });
 
@@ -48,11 +65,38 @@ describe("HomeCtrl", function () {
 
     beforeEach(function () {
       spyOn(geoLocationService, "stop");
+      spyOn(interval, 'cancel');
+      scope.recording(true); //We need to start the timer first.
+      interval.flush(1000);
       scope.recording(false);
     });
 
     it("should stop recording if 'on' === false", function () {
       expect(geoLocationService.stop).toHaveBeenCalled();
+    });
+
+    it("should increase the number of files to upload", function () {
+      expect(scope.totalFiles).toEqual(1);
+    });
+
+    it("should enable upload", function () {
+      expect(scope.uploadDisabled).toBeFalsy();
+    });
+
+    it("should stop the timer", function () {
+      expect(interval.cancel).toHaveBeenCalled();
+    });
+
+    it("should reset elapsed time", function () {
+      expect(scope.session.elapsed).toEqual("00:00");
+    });
+
+    it("should reset current speed", function () {
+      expect(scope.session.curSpeed).toEqual(0);
+    });
+
+    it("should reset max speed", function () {
+      expect(scope.session.maxSpeed).toEqual(0);
     });
   });
 });

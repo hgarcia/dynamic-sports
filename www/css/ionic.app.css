@@ -6362,10 +6362,25 @@ a.button {
   top: 64px; }
 
 .center-child .scroll {
-  margin-top: -105px;
-  position: fixed;
-  width: 100%;
-  top: 50%; }
+  width: 100%; }
+  .center-child .scroll .speedometer-container {
+    position: relative;
+    text-align: center;
+    margin-bottom: 24px;
+    margin-top: 12px; }
+    .center-child .scroll .speedometer-container .instrument {
+      border: solid 2px #66cc33;
+      padding: 3px 6px;
+      display: inline-block; }
+      .center-child .scroll .speedometer-container .instrument .instrument-figure {
+        font-size: 24px; }
+        .center-child .scroll .speedometer-container .instrument .instrument-figure.no-units {
+          height: 25px; }
+        .center-child .scroll .speedometer-container .instrument .instrument-figure small {
+          font-size: 12px; }
+  .center-child .scroll .play-button {
+    position: relative;
+    top: 100px; }
   .center-child .scroll .button.start-stop {
     border-radius: 50px;
     height: 100px;

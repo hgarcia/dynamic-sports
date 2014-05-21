@@ -35,10 +35,32 @@
 }
 .center-child {
   .scroll {
-    margin-top: -105px;
-    position: fixed;
+    .speedometer-container {
+      margin-bottom: 24px;
+      margin-top: 12px;
+      position: relative;
+      text-align:center;
+      .instrument {
+        border: solid 2px $balanced;
+        display: inline-block;
+        min-width: 90px;
+        padding: 3px 6px;
+        .instrument-figure {
+          font-size: 24px;
+          &.no-units {
+            height: 25px;
+          }
+          small {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+    .play-button {
+      position: relative;
+      top: 70px;
+    }
     width: 100%;
-    top: 50%;
     .button {
       &.start-stop {
         border-radius: 50px;
