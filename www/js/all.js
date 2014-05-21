@@ -272,21 +272,12 @@ angular.module('dynamic-sports.services')
       };
     }
 
-    function remove(file, successCb, errorCb) {
-      return function (fileSystem) {
-
-      };
-    }
-
     return {
       list: function (successCb, errorCb) {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, list(successCb, errorCb), errorCb);
       },
       save: function (fileName, data, successCb, errorCb) {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, write(fileName, data, successCb, errorCb), errorCb);
-      },
-      remove: function (file, successCb, errorCb) {
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, remove(file, successCb, errorCb), errorCb);
       },
       open: function (fileName, successCb, errorCb) {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, read(fileName, successCb, errorCb), errorCb);
@@ -301,7 +292,7 @@ angular.module('dynamic-sports.services')
     var watchId;
     return {
       start: function (success, error) {
-        watchId = navigator.geolocation.watchPosition(success, error, {frequency: 3000, enableHighAccuracy: true});
+        watchId = navigator.geolocation.watchPosition(success, error, {frequency: 1000});
         return watchId;
       },
       stop: function () {

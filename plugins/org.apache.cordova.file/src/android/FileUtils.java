@@ -338,13 +338,7 @@ public class FileUtils extends CordovaPlugin {
                 }
             }, callbackContext);
         }
-        else if (action.equals("requestAllFileSystems")) {
-            threadhelper( new FileOp( ){
-                public void run() throws IOException, JSONException {
-                    callbackContext.success(requestAllFileSystems());
-                }
-            }, callbackContext);
-        } else if (action.equals("requestFileSystem")) {
+        else if (action.equals("requestFileSystem")) {
             final int fstype=args.getInt(0);
             final long size = args.optLong(1);
             threadhelper( new FileOp( ){
@@ -825,29 +819,9 @@ public class FileUtils extends CordovaPlugin {
         if (rootFs == null) {
             throw new IOException("No filesystem of type requested");        	
         }
-        LocalFilesystemURL rootURL = new LocalFilesystemURL(LocalFilesystemURL.FILESYSTEM_PROTOCOL + "://localhost/"+rootFs.name+"/");
-
         fs.put("name", rootFs.name);
-        fs.put("root", rootFs.getEntryForLocalURL(rootURL));
+        fs.put("root", Filesystem.makeEntryForPath("/", rootFs.name, true));
         return fs;
-    }
-
-
-    /**
-     * Requests a filesystem in which to store application data.
-     *
-     * @param type of file system requested
-     * @return a JSONObject representing the file system
-     * @throws IOException
-     * @throws JSONException
-     */
-    private JSONArray requestAllFileSystems() throws IOException, JSONException {
-        JSONArray ret = new JSONArray();
-        for (Filesystem fs : filesystems) {
-            LocalFilesystemURL rootURL = new LocalFilesystemURL(LocalFilesystemURL.FILESYSTEM_PROTOCOL + "://localhost/"+fs.name+"/");
-            ret.put(fs.getEntryForLocalURL(rootURL));
-        }
-        return ret;
     }
 
    /**

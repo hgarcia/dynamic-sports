@@ -21,7 +21,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
 xmlns:android="http://schemas.android.com/apk/res/android"
            id="org.apache.cordova.file"
-      version="1.1.1-dev">
+      version="1.1.0">
     <name>File</name>
     <description>Cordova File Plugin</description>
     <license>Apache 2.0</license>
@@ -92,8 +92,6 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <clobbers target="window.ProgressEvent" />
     </js-module>
 
-    <js-module src="www/fileSystems.js" name="fileSystems" />
-
     <js-module src="www/requestFileSystem.js" name="requestFileSystem">
         <clobbers target="window.requestFileSystem" />
     </js-module>
@@ -130,10 +128,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
         <!-- android specific file apis -->
         <js-module src="www/android/FileSystem.js" name="androidFileSystem">
-            <merges target="FileSystem" />
-        </js-module>
-        <js-module src="www/fileSystems-roots.js" name="fileSystems-roots">
-            <runs/>
+            <merges target="window.FileSystem" />
         </js-module>
     </platform>
 
@@ -201,11 +196,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
         <!-- ios specific file apis -->
         <js-module src="www/ios/FileSystem.js" name="iosFileSystem">
-            <merges target="FileSystem" />
-        </js-module>
-
-        <js-module src="www/fileSystems-roots.js" name="fileSystems-roots">
-            <runs/>
+            <merges target="window.FileSystem" />
         </js-module>
 
         <framework src="AssetsLibrary.framework" />

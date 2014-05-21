@@ -25,7 +25,7 @@ angular.module('dynamic-sports.controllers')
       if (speed >= 0) {
         $scope.session.curSpeed = toKmPerHour(speed);
       }
-      if (speed > $scope.session.maxSpeed) {
+      if ($scope.session.curSpeed > $scope.session.maxSpeed) {
         $scope.session.maxSpeed = toKmPerHour(speed);
       }
     }

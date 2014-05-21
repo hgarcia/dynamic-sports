@@ -78,7 +78,6 @@ typedef int CDVFileError;
 - (void)getFileMetadataForURL:(CDVFilesystemURL *)localURL callback:(void (^)(CDVPluginResult *))callback;
 
 - (NSDictionary *)makeEntryForLocalURL:(CDVFilesystemURL *)url;
-- (NSDictionary*)makeEntryForPath:(NSString*)fullPath isDirectory:(BOOL)isDir;
 
 @property (nonatomic,strong) NSString *name;
 
@@ -99,7 +98,7 @@ typedef int CDVFileError;
 }
 
 - (NSNumber*)checkFreeDiskSpace:(NSString*)appPath;
-- (NSDictionary*)makeEntryForPath:(NSString*)fullPath isDirectory:(BOOL)isDir;
+- (NSDictionary*)makeEntryForPath:(NSString*)fullPath fileSystemName:(NSString *)fsName isDirectory:(BOOL)isDir;
 - (NSDictionary *)makeEntryForURL:(NSURL *)URL;
 - (CDVFilesystemURL *)fileSystemURLforLocalPath:(NSString *)localPath;
 
