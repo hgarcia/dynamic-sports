@@ -1,13 +1,13 @@
 /* global describe, beforeEach, it, module, inject */
 describe("Geo Location services", function () {
   "use strict";
-  var scope, service;
+  var service, interval;
 
   beforeEach(module("dynamic-sports.services"));
 
-  beforeEach(inject(function ($rootScope, _geoLocationService_) {
-    scope = $rootScope.$new();
+  beforeEach(inject(function ($rootScope, $interval, _geoLocationService_) {
     service = _geoLocationService_;
+    interval = $interval;
   }));
 
   describe("start(successCb, errorCb)", function () {
@@ -16,7 +16,7 @@ describe("Geo Location services", function () {
 
     it("should start watching the position", function () {
       service.start(success, error);
-      expect(navigator.geolocation.watchPosition).toHaveBeenCalledWith(success, error, {maximumAge: 3000, timeout: 5000, enableHighAccuracy: true});
+      expect(navigator.geolocation.getCurrentPosition).toHaveBeenCalled();
     });
 
     it("should return an id for the started service", function () {
@@ -26,16 +26,19 @@ describe("Geo Location services", function () {
   });
 
   describe("stop()", function () {
+    beforeEach(function () {
+      spyOn(interval, 'cancel');
+    });
 
-    it("should not call clearWatch if we are not watching", function () {
+    it("should not call stop watching", function () {
       service.stop();
-      expect(navigator.geolocation.clearWatch).not.toHaveBeenCalled();
+      expect(interval.cancel).not.toHaveBeenCalled();
     });
 
     it("should call clearWatch with the watchId", function () {
       service.start();
       service.stop();
-      expect(navigator.geolocation.clearWatch).toHaveBeenCalledWith("12345");
+      expect(interval.cancel).toHaveBeenCalled();
     });
   });
 });

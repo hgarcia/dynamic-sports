@@ -6,8 +6,7 @@ angular.module('dynamic-sports.controllers')
     var fileName;
     var elapsedTimer;
     var duration;
-    var RADIANT_CONSTANT = 0.0174532925199433;
-    var KM_RATIO = 6371;
+    var prevCoord;
 
     $scope.uploading = false;
     $scope.uploadDisabled = false;
@@ -17,44 +16,54 @@ angular.module('dynamic-sports.controllers')
     $scope.totalFiles = 0;
 
     function resetSession() {
-      $scope.session = {maxSpeed: 0, curSpeed: 0, elapsed: "00:00"};
+      $scope.session = {avgSpeed: 0, distance: 0, elapsed: "00:00"};
     }
 
-    function toKmPerHour(meterPerSecond) {
-      return String(meterPerSecond * 3.6).substring(0, 3);
-    }
-
-    function toRad() {
+    function toRad(value) {
+      var RADIANT_CONSTANT = 0.0174532925199433;
       return (value * RADIANT_CONSTANT);
     }
 
-    function getDistance(lat1, lat2, lon1, lon2) {
-      var dLat = toRad(lat2 - lat1);
-      var dLon = toRad(lon2 - lon1);
-      var lat1Rad = toRad(lat1);
-      var lat2Rad = toRad(lat2);
-      
-      var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1Rad) * Math.cos(lat2Rad);
-      
-      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-      return KM_RATIO * c;
+    function calculateDistance(starting, ending) {
+      /*
+      latitude":43.64241221061246,"longitude":-79.37423813140495
+      latitude":43.6424056308755 ,"longitude":-79.37427474668694
+      */
+      var KM_RATIO = 6371;
+      try {      
+        var dLat = toRad(ending.latitude - starting.latitude);
+        var dLon = toRad(ending.longitude - starting.longitude);
+        var lat1Rad = toRad(starting.latitude);
+        var lat2Rad = toRad(ending.latitude);
+        
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1Rad) * Math.cos(lat2Rad);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var d = KM_RATIO * c;
+        return d;
+      } catch(e) {
+        return -1;
+      }
     }
 
-    function setSpeed(speed) {
-      if (speed >= 0) {
-        $scope.session.curSpeed = toKmPerHour(speed);
+    $scope.distance = calculateDistance;
+
+    function setSpeed(coords) {
+      if (!prevCoord) {
+        prevCoord = coords;
       }
-      if ($scope.session.curSpeed > $scope.session.maxSpeed) {
-        $scope.session.maxSpeed = toKmPerHour(speed);
+      $scope.session.distance += calculateDistance(prevCoord, coords);
+      if (duration.asSeconds() > 0) {
+        $scope.session.avgSpeed = ($scope.session.distance / duration.asSeconds()) * 3600;
       }
+      prevCoord = coords;
     }
 
     function onChange(newPosition) {
+      if (!elapsedTimer) { return; }
       var data = newPosition.coords;
       data.timestamp = newPosition.timestamp;
-      setSpeed(data.speed);
+      setSpeed(data);
       fileService.save(fileName, data, function () {}, function (error) { alert("Error file save");});
     }
 
@@ -131,7 +140,7 @@ angular.module('dynamic-sports.controllers')
       if (hours === "00") {
         $scope.session.elapsed = minutes + ":" + seconds;
       } else {
-        $scope.session.elapsed = hours + ":" + minutes + ":" + seconds;
+        $scope.session.elapsed = hours + ":" + minutes;
       }
     }
 
@@ -157,7 +166,8 @@ angular.module('dynamic-sports.controllers')
 
     $scope.recording = function (on) {
       if (on) {
-        fileName = geoLocationService.start(onChange, function (err) { alert("Error geolocation service"); });
+        fileName = String((new Date()).getTime());
+        geoLocationService.start(onChange, function (err) { alert("Error geolocation service:" + JSON.stringify(err)); });
         startTimer();
       } else {
         geoLocationService.stop();

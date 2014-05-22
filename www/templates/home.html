@@ -7,12 +7,12 @@
   <ion-content class="center-child" has-header="true" padding="true">
     <div class="speedometer-container">
         <div class="instrument">
-            <small class="icon-left ion-ios7-speedometer"> max speed</small><br/>
-            <div class="instrument-figure"> <span>{{session.maxSpeed}}</span> <small>km/h</small></div>
+            <small class="icon-left ion-ios7-speedometer"> avg speed</small><br/>
+            <div class="instrument-figure"> <span>{{session.avgSpeed | number:2}}</span> <small>km/h</small></div>
         </div>
         <div class="instrument">
-            <small class="icon-left ion-ios7-speedometer-outline"> curr. speed</small><br/>
-            <div class="instrument-figure"> <span>{{session.curSpeed}}</span> <small>km/h</small></div>
+            <small class="icon-left ion-ios7-speedometer-outline"> distance</small><br/>
+            <div class="instrument-figure"> <span>{{session.distance | number:2}}</span> <small>km</small></div>
         </div>
         <div class="instrument">
             <small class="icon-left ion-ios7-stopwatch-outline"> duration</small><br/>

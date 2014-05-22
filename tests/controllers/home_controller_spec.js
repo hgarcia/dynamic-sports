@@ -16,6 +16,15 @@ describe("HomeCtrl", function () {
     $controller("HomeCtrl", {$scope: scope, $timeout: timeout, $interval: interval, geoLocationService: geoLocationService, fileService: fileService});
   }));
 
+  describe("#distance()", function () {
+    it("should be 3 meters", function () {
+      var str = {latitude: 43.64241221061246, longitude: -79.37423813140495};
+      var end = {latitude: 43.6424056308755 , longitude: -79.37427474668694};
+      var res = scope.distance(str, end);
+      expect(res).toEqual(0.0030358192690878322);
+    });
+  });
+
   describe("#upload()", function () {
 
     it("should use the serverService to upload the files", function () {
@@ -43,12 +52,6 @@ describe("HomeCtrl", function () {
       var payload = {coords: {speed: 1}, timestamp: "time-stamp-here"};
       geoLocationService.start.mostRecentCall.args[0](payload);
       expect(fileService.save).toHaveBeenCalled();
-    });
-
-    it("should set the speed in km/h", function () {
-      var payload = {coords: {speed: 32}, timestamp: "time-stamp-here"};
-      geoLocationService.start.mostRecentCall.args[0](payload);
-      expect(scope.session.curSpeed).toEqual("115");
     });
 
     it("should start to calculate elapsed time", function () {
@@ -91,12 +94,12 @@ describe("HomeCtrl", function () {
       expect(scope.session.elapsed).toEqual("00:00");
     });
 
-    it("should reset current speed", function () {
-      expect(scope.session.curSpeed).toEqual(0);
+    it("should reset avg speed", function () {
+      expect(scope.session.avgSpeed).toEqual(0);
     });
 
-    it("should reset max speed", function () {
-      expect(scope.session.maxSpeed).toEqual(0);
+    it("should reset distance", function () {
+      expect(scope.session.distance).toEqual(0);
     });
   });
 });

@@ -1,6 +1,6 @@
 //Geo location
 
-navigator = {geolocation: {watchPosition: jasmine.createSpy().andReturn("12345"), clearWatch: jasmine.createSpy()}};
+navigator = {geolocation: {getCurrentPosition: jasmine.createSpy(), clearWatch: jasmine.createSpy()}};
 
 // File
 LocalFileSystem = {PERSISTENT: 1};

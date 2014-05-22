@@ -1,17 +1,19 @@
 /* globals angular */
 angular.module('dynamic-sports.services')
-  .factory('geoLocationService', function () {
+  .factory('geoLocationService', ['$interval', function ($interval) {
     'use strict';
     var watchId;
+
     return {
       start: function (success, error) {
-        watchId = navigator.geolocation.watchPosition(success, error, {maximumAge: 3000, timeout: 5000, enableHighAccuracy: true});
-        return watchId;
+        watchId = $interval(function () {
+          navigator.geolocation.getCurrentPosition(success, error, {enableHighAccuracy: true});
+        }, 1000);
       },
       stop: function () {
         if (watchId) {
-           navigator.geolocation.clearWatch(watchId);
+          $interval.cancel(watchId);
         }
       }
     };
-  });
+  }]);
