@@ -21,7 +21,8 @@ describe("HomeCtrl", function () {
       var str = {latitude: 43.64241221061246, longitude: -79.37423813140495};
       var end = {latitude: 43.6424056308755 , longitude: -79.37427474668694};
       var res = scope.distance(str, end);
-      expect(res).toEqual(0.0030358192690878322);
+      expect(res).toBeGreaterThan(0.003);
+      expect(res).toBeLessThan(0.004);
     });
   });
 
